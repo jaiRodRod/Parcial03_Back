@@ -27,12 +27,12 @@ async def add_baseLog(baseLog: BaseLog = Body(...)):
 
 @router.get("/")
 async def get_baseLog(
-        filter_user: Optional[str] = Query(None),
+        usuario_visitado: Optional[str] = Query(None),
         sort: Optional[bool] = Query(None),
 ):
     filter = {}
-    if filter_user:
-        filter["email"] = filter_user
+    if usuario_visitado:
+        filter["usuario_visitado"] = usuario_visitado
 
     items = await logs.get_baseLog(filter)
 

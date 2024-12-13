@@ -4,12 +4,12 @@ import motor
 from bson import ObjectId
 from motor import motor_asyncio
 from dotenv import load_dotenv
-from schemas.eventoTEST import evento as eventoTEST
+from schemas.localizacionSchema import localizacion
 
 """
 CTRL-F A CAMBIAR:
-    - NOMBRE_COLLECTION = eventos
-    - SCHEMA = eventoTEST
+    - NOMBRE_COLLECTION = localizacion_collection
+    - SCHEMA = localizacion
     - IDENTIFICADOR = id
 """
 
@@ -19,49 +19,49 @@ MONGO_URI = os.getenv("MONGO_URI")
 
 client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_URI)
 database = client.databaseExamen
-eventos_collection = database["eventos"]
+localizacion_collection_collection = database["localizacion_collection"]
 
-async def add_eventoTEST(eventoTEST: eventoTEST):
-    eventoTEST_data = eventoTEST.model_dump()
-    item = await eventos_collection.insert_one(eventoTEST_data)
+async def add_localizacion(localizacion: localizacion):
+    localizacion_data = localizacion.model_dump()
+    item = await localizacion_collection_collection.insert_one(localizacion_data)
     return True
 
-async def update_eventoTEST(id: str, eventoTEST: eventoTEST):
-    if not eventoTEST:
+async def update_localizacion(id: str, localizacion: localizacion):
+    if not localizacion:
         return False
-    item = await eventos_collection.find_one({"_id": ObjectId(id)})
+    item = await localizacion_collection_collection.find_one({"_id": ObjectId(id)})
     if item:
-        updatedItem = await eventos_collection.update_one(
-            {"_id": ObjectId(id)}, {"$set": eventoTEST}
+        updatedItem = await localizacion_collection_collection.update_one(
+            {"_id": id}, {"$set": localizacion}
         )
         return bool(updatedItem)
     else:
         return False
 
-async def delete_eventoTEST(id: str):
+async def delete_localizacion(id: str):
     deleted = False
-    item = await eventos_collection.find_one({"_id": ObjectId(id)})
+    item = await localizacion_collection_collection.find_one({"_id": ObjectId(id)})
     if item:
-        await eventos_collection.delete_one({"_id": ObjectId(id)})
+        await localizacion_collection_collection.delete_one({"_id": ObjectId(id)})
         deleted = True
     return deleted
 
 
-async def get_eventoTEST(filter):
+async def get_localizacion(filter):
     results = []
     if len(filter) > 0:
-        cursor = eventos_collection.find(filter)
+        cursor = localizacion_collection_collection.find(filter)
         async for document in cursor:
             document['_id'] = str(document['_id'])  # Convertir ObjectId a string
             results.append(document)
     else:
-        async for item in eventos_collection.find():
+        async for item in localizacion_collection_collection.find():
             item["_id"] = str(item["_id"])
             results.append(item)
     return results
 
-async def get_eventoTEST_id(id: str) -> dict:
-    item = await eventos_collection.find_one({"_id": ObjectId(id)})
+async def get_localizacion_id(id: str) -> dict:
+    item = await localizacion_collection_collection.find_one({"_id": ObjectId(id)})
     if item:
         item["_id"] = str(item["_id"])
         return item

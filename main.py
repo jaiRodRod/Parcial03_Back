@@ -1,6 +1,6 @@
 import json
 from fastapi import FastAPI
-from routers import baseLogRouter, eventoRouterTEST
+from routers import baseLogRouter, localizacionRouter
 from fastapi.middleware.cors import CORSMiddleware
 urls = json.load(open('urls.json'))
 
@@ -17,8 +17,6 @@ For requirements do:
 
 app = FastAPI()
 
-origins = ["*"]
-
 """
 origins = [
     "http://localhost",
@@ -26,6 +24,8 @@ origins = [
     "https://parcial03-front.vercel.app/",
 ]
 """
+
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -36,5 +36,4 @@ app.add_middleware(
 )
 
 app.include_router(baseLogRouter.router,prefix=urls["log_url"])
-
-app.include_router(eventoRouterTEST.router,prefix=urls["eventTEST_url"])
+app.include_router(localizacionRouter.router, prefix=urls["localizacion_url"])
